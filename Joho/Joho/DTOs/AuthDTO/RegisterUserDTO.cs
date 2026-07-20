@@ -5,7 +5,7 @@ namespace Joho.DTOs.AuthDTO
     public record RegisterUserDTO
     {
         [Required]
-        public string Username { get; init; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
         [Required]
         [EmailAddress]
         public string Email { get; init; } = string.Empty;
