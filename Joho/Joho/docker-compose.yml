@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: puppies_buppies_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-joho_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-joho_password}
+      POSTGRES_DB: ${DB_NAME:-joho_db}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: ./Joho/Dockerfile 
+    container_name: joho_api
+    restart: always
+    ports:
+      - "${API_PORT:-5001}:8080"
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=${DB_NAME:-joho_db};Username=${DB_USER:-joho_user};Password=${DB_PASSWORD:-joho_password};
+      - ASPNETCORE_ENVIRONMENT=${ASPNET_ENV:-Development}
+    depends_on:
+      - db
+
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: puppies_buppies_frontend
+  #   restart: always
+  #   ports:
+  #     - "5173:5173"
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #   environment:
+  #     - CHOKIDAR_USEPOLLING=true
+  #   depends_on:
+  #     - api
+      
+volumes:
+  postgres_data:
