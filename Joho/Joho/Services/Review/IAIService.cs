@@ -1,6 +1,9 @@
-﻿namespace Joho.Services.Review
+﻿using Joho.DTOs.ReviewDTO;
+
+namespace Joho.Services.Review
 {
-    public class IAIService
+    public interface IAIService
     {
+        Task<CodeReviewResponseDTO> ReviewCodeAsync(CodeReviewRequestDTO request, CancellationToken cancellationToken = default);
     }
 }
