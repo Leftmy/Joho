@@ -39,7 +39,7 @@ namespace Joho.Services.Auth
 
         public async Task<AuthResponseDTO> LoginAsync(LoginUserDTO loginDTO)
         {
-            var user = await _userManager.FindByNameAsync(loginDTO.Username);
+            var user = await _userManager.FindByEmailAsync(loginDTO.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginDTO.Password))
             {
                 throw new Exception("Invalid username or password.");
@@ -73,7 +73,7 @@ namespace Joho.Services.Auth
         {
             new(ClaimTypes.NameIdentifier, user.Id),
             new(ClaimTypes.Email, user.Email!),
-            new(ClaimTypes.Name, user.Username)
+            new(ClaimTypes.Name, user.UserName!)
         };
 
             var expiresAt = DateTime.UtcNow.AddMinutes(15);

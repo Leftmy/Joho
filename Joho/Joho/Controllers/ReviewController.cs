@@ -12,12 +12,12 @@ namespace Joho.Controllers
     public class ReviewController : ControllerBase
     {
         private readonly IAIService _aiService;
-        private readonly IThirdPartyService _thirdPartyService;
+        // private readonly IThirdPartyService _thirdPartyService;
 
-        public ReviewController(IAIService aiService, IThirdPartyService thirdPartyService)
+        public ReviewController(IAIService aiService/*, ThirdPartyService thirdPartyService*/)
         {
             _aiService = aiService;
-            _thirdPartyService = thirdPartyService;
+            //_thirdPartyService = thirdPartyService;
         }
         [HttpPost]
         public async Task<ActionResult<CodeReviewResponseDTO>> ReviewCode(
