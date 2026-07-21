@@ -21,7 +21,7 @@ services:
 
   api:
     build:
-      context: .
+      context: ./Joho
       dockerfile: ./Joho/Dockerfile
     container_name: joho_api
     restart: always
@@ -36,7 +36,7 @@ services:
 
   frontend:
     build:
-      context: ../frontend
+      context: ./frontend
       dockerfile: Dockerfile
     container_name: joho_frontend
     restart: always

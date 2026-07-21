@@ -1,4 +1,5 @@
 ﻿using Joho.Services.Auth;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Joho.DTOs.AuthDTO;
 
@@ -35,6 +36,29 @@ namespace Joho.Controllers
             try
             {
                 var result = await _authService.LoginAsync(dto);
+
+                var accessCookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = result.ExpiresAt
+                };
+
+                var refreshCookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddDays(30)
+                };
+
+                Response.Cookies.Append("AccessToken", result.Token ?? string.Empty, accessCookieOptions);
+                if (!string.IsNullOrEmpty(result.RefreshToken))
+                {
+                    Response.Cookies.Append("RefreshToken", result.RefreshToken, refreshCookieOptions);
+                }
+
                 return Ok(result);
             }
             catch (Exception ex)
